@@ -12,11 +12,11 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @NotEmpty(message = "err.field.name.required")
+    @NotEmpty(message = "{err.field.name.required}")
     @Column(name = "name")
     private String name;
 
-    @NotEmpty(message = "err.field.surname.required")
+    @NotEmpty(message = "{err.field.surname.required}")
     @Column(name = "surname")
     private String surname;
 
@@ -25,6 +25,7 @@ public class User {
     @Column(name = "email")
     private String email;
 
+    @NotEmpty(message = "{err.field.password.required}")
     @Column(name = "password")
     private String password;
 

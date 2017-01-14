@@ -31,7 +31,7 @@ public class RegisterController {
     }
 
     @RequestMapping(path = "/register", method = RequestMethod.GET)
-    public String registeration() {
+    public String registeration(User user) {
         return "register";
     }
 
@@ -57,5 +57,4 @@ public class RegisterController {
 
         return "redirect:login";
     }
-
 }

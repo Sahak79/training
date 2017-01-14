@@ -12,6 +12,11 @@ import java.util.Collection;
  * Created by SahakBabayan on 12/17/2016.
  */
 public class SessionUser extends User implements UserDetails {
+
+    public SessionUser(User user) {
+        super(user);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return AuthorityUtils.createAuthorityList("ROLE_ADMIN");

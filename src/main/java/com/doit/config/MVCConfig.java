@@ -26,11 +26,31 @@ public class MVCConfig extends WebMvcConfigurerAdapter {
         return messageSource;
     }
 
+    /**
+     * Adding resource paths
+     */
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/**")
+                .addResourceLocations(
+                        "classpath:/META-INF/resources/",
+                        "classpath:/resources/",
+                        "classpath:/static/",
+                        "classpath:/public/"
+                );
+    }
+
+
     @Override
     public Validator getValidator() {
         LocalValidatorFactoryBean validatorFactoryBean =
                 new LocalValidatorFactoryBean();
         validatorFactoryBean.setValidationMessageSource(messageSource());
         return validatorFactoryBean;
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/").setViewName("index");
     }
 }

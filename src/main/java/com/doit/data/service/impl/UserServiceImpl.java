@@ -2,11 +2,15 @@ package com.doit.data.service.impl;
 
 import com.doit.data.User;
 import com.doit.data.dao.UserDao;
+import com.doit.data.internal.SessionUser;
 import com.doit.data.service.UserService;
 import com.doit.exception.DatabaseException;
 import com.doit.exception.EntityNotFoundException;
 import com.doit.exception.InternalServerException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +25,12 @@ public class UserServiceImpl implements UserService {
     private UserDao userDao;
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public void add(User user) throws InternalServerException {
         try {
+            String encPassword = new BCryptPasswordEncoder().encode(user.getPassword());
+            user.setPassword(encPassword);
+
             userDao.add(user);
         }catch (DatabaseException e) {
             throw new InternalServerException(e);
@@ -61,6 +68,19 @@ public class UserServiceImpl implements UserService {
     public boolean isEmailExist(String email, long excludedUserID) throws InternalServerException {
         try {
             return userDao.isEmailExist(email, excludedUserID);
+        }catch (DatabaseException e) {
+            throw new InternalServerException(e);
+        }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        try {
+            User user = userDao.getByEmail(email);
+            if (user == null) {
+                throw new UsernameNotFoundException("Invalid credentials");
+            }
+            return new SessionUser(user);
         }catch (DatabaseException e) {
             throw new InternalServerException(e);
         }

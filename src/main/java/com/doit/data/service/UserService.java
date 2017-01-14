@@ -2,11 +2,12 @@ package com.doit.data.service;
 
 import com.doit.data.User;
 import com.doit.exception.InternalServerException;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 /**
  * Created by SahakBabayan on 12/17/2016.
  */
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     void add(User user) throws InternalServerException;
 
